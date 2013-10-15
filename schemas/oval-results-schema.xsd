@@ -9,8 +9,8 @@
           <xsd:documentation>The OVAL Schema is maintained by The MITRE Corporation and developed by the public OVAL Community. For more information, including how to get involved in the project and how to submit change requests, please visit the OVAL website at http://oval.mitre.org.</xsd:documentation>
           <xsd:appinfo>
                <schema>Core Results</schema>
-               <version>5.11 Draft 1</version>
-               <date>2/20/2013 5:18:14 PM</date>
+               <version>5.11 Draft 2</version>
+               <date>9/25/2013 3:41:26 PM</date>
                 <terms_of_use>Copyright (c) 2002-2013, The MITRE Corporation. All rights reserved.  The contents of this file are subject to the terms of the OVAL License located at http://oval.mitre.org/oval/about/termsofuse.html. See the OVAL License for the specific language governing permissions and limitations for use of this schema.  When distributing copies of the OVAL Schema, this license header must be included.</terms_of_use>
                <sch:ns prefix="oval-res" uri="http://oval.mitre.org/XMLSchema/oval-results-5"/>
           </xsd:appinfo>
@@ -487,7 +487,7 @@
      </xsd:complexType>
      <xsd:complexType name="TestType">
           <xsd:annotation>
-               <xsd:documentation>The TestType complex type provides a reference to every item that matched the object section of the original test as well as providing an overall test result based on those items. The optional message element holds an error message or some other string that the analysis engine wishes to pass along. The optional tested_variable elements hold the value of each variable used by the test during evaluation. This includes the values used in both OVAL Objects and OVAL States. If a variable represents an array of values, then multiple tested_variable elements would exist with the same variable_id attribute. Please refer to the description of oval-res:TestedVariableType for more information.</xsd:documentation>
+               <xsd:documentation>The TestType complex type provides a reference to every item that matched the object section of the original test as well as providing an overall test result based on those items. The optional message element holds an error message or some other string that the analysis engine wishes to pass along. The optional tested_variable elements hold the value of each variable used by the test during evaluation. This includes the values used in both OVAL Objects and OVAL States. If a variable represents a collection of values, then multiple tested_variable elements would exist with the same variable_id attribute. Please refer to the description of oval-res:TestedVariableType for more information.</xsd:documentation>
                <xsd:documentation>The required test_id attribute identifies the test and must conform to the format specified by the oval:TestIDPattern simple type.</xsd:documentation>
                <xsd:documentation>The required version attribute is the specific version of the OVAL Test used during analysis.</xsd:documentation>
                <xsd:documentation>The optional variable_instance attribute differentiates between unique instances of a test. This can happen when a test includes a variable reference and different values for that variable are used by different definitions.</xsd:documentation>
@@ -527,7 +527,7 @@
      </xsd:complexType>
      <xsd:complexType name="TestedVariableType">
           <xsd:annotation>
-               <xsd:documentation>The TestedVariableType complex type holds the value of a variable used during the evaluation of a test. Of special importance are the values of any external variables used since these values are not captured in either the definition or system characteristic documents. If a variable is represented by an array of values, then multiple elements of TestedVariableType, each with the same variable_id attribute, would exist. The required variable_id attribute is the unique id of the variable that was used.</xsd:documentation>
+               <xsd:documentation>The TestedVariableType complex type holds the value of a variable used during the evaluation of a test. Of special importance are the values of any external variables used since these values are not captured in either the definition or system characteristic documents. If a variable is represented by a collection of values, then multiple elements of TestedVariableType, each with the same variable_id attribute, would exist. The required variable_id attribute is the unique id of the variable that was used.</xsd:documentation>
           </xsd:annotation>
           <xsd:simpleContent>
                <xsd:extension base="xsd:anySimpleType">

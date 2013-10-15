@@ -7,8 +7,8 @@
         <xsd:documentation>The OVAL Schema is maintained by The MITRE Corporation and developed by the public OVAL Community. For more information, including how to get involved in the project and how to submit change requests, please visit the OVAL website at http://oval.mitre.org.</xsd:documentation>
         <xsd:appinfo>
             <schema>Core Definition</schema>
-            <version>5.11 Draft 1</version>
-            <date>2/20/2013 5:18:14 PM</date>
+            <version>5.11 Draft 2</version>
+            <date>9/25/2013 3:41:26 PM</date>
             <terms_of_use>Copyright (c) 2002-2013, The MITRE Corporation. All rights reserved. The contents of this file are subject to the terms of the OVAL License located at http://oval.mitre.org/oval/about/termsofuse.html. See the OVAL License for the specific language governing permissions and limitations for use of this schema. When distributing copies of the OVAL Schema, this license header must be included.</terms_of_use>
             <sch:ns prefix="oval-def" uri="http://oval.mitre.org/XMLSchema/oval-definitions-5"/>
             <sch:ns prefix="xsi" uri="http://www.w3.org/2001/XMLSchema-instance"/>
@@ -480,14 +480,26 @@
     </xsd:complexType>
     <xsd:element name="variable" type="oval-def:VariableType" abstract="true">
         <xsd:annotation>
-            <xsd:documentation>The variable element is an abstract element that is meant to be extended (via substitution groups) by the different types of variables. An actual variable element is not valid. The different variable types describe different sources for obtaining a value(s) for the variable. There are currently three types of variables; local, external, and constant. Please refer to the description of each one for more specific information. The value(s) of a variable is treated as if it were inserted where referenced. One of the main benefits of variables is that they allow tests to evaluate user-defined policy. For example, an OVAL Test might check to see if a password is at least a certain number of characters long, but this number depends upon the individual policy of the user. To solve this, the test for password length can be written to refer to a variable element that defines the length.</xsd:documentation>
-            <xsd:documentation>If a variable defines an array of values, any entity that references the variable will evaluate to true depending on the value of the var_check attribute. For example, if an entity 'size' with an operation of 'less than' references a variable that returns five different integers, and the var_check attribute has a value of 'all', then the 'size' entity returns true only if the actual size is less than each of the five integers defined by the variable. If a variable does not return any value, then an error should be reported during OVAL analysis.</xsd:documentation>
+            <xsd:documentation>The variable element is an abstract element that is meant to be extended (via substitution groups) by the different types of variables. An actual variable element is not valid.
+                The different variable types describe different sources for obtaining a value(s) for the variable. There are currently three types of variables; local, external, and constant.
+                Please refer to the description of each one for more specific information. The value(s) of a variable is treated as if it were inserted where referenced. 
+                One of the main benefits of variables is that they allow tests to evaluate user-defined policy. 
+                For example, an OVAL Test might check to see if a password is at least a certain number of characters long, but this number depends upon the individual policy of the user. 
+                To solve this, the test for password length can be written to refer to a variable element that defines the length.</xsd:documentation>
+            <xsd:documentation>If a variable defines a collection of values, any entity that references the variable will evaluate to true depending on the value of the var_check attribute.
+                For example, if an entity 'size' with an operation of 'less than' references a variable that returns five different integers, and the var_check attribute has a value of 'all', then the 'size' entity returns true only if the actual size is less than each of the five integers defined by the variable.
+                If a variable does not return any value, then an error should be reported during OVAL analysis.</xsd:documentation>
         </xsd:annotation>
     </xsd:element>
     <xsd:complexType name="VariableType">
         <xsd:annotation>
-            <xsd:documentation>The VariableType complex type defines attributes associated with each OVAL Variable. The required id attribute uniquely identifies each variable, and must conform to the format specified by the VariableIDPattern simple type. The required version attribute holds the current version of the variable. Versions are integers, starting at 1 and incrementing every time a variable is modified.  The required comment attribute provides a short description of the variable. The optional deprecated attribute signifies that an id is no longer to be used or referenced but the information has been kept around for historic purposes.</xsd:documentation>
-            <xsd:documentation>The required datatype attribute specifies the type of value being defined.  The set of values identified by a variable must comply with the specified datatype, otherwise an error should be reported.  Please see the DatatypeEnumeration for details about each valid datatype.  For example, if the datatype of the variable is specified as boolean then the value(s) returned by the component / function should be "true", "false", "1", or "0".</xsd:documentation>
+            <xsd:documentation>The VariableType complex type defines attributes associated with each OVAL Variable.
+                The required id attribute uniquely identifies each variable, and must conform to the format specified by the VariableIDPattern simple type.
+                The required version attribute holds the current version of the variable. Versions are integers, starting at 1 and incrementing every time a variable is modified. 
+                The required comment attribute provides a short description of the variable.
+                The optional deprecated attribute signifies that an id is no longer to be used or referenced but the information has been kept around for historic purposes.</xsd:documentation>
+            <xsd:documentation>The required datatype attribute specifies the type of value being defined.  The set of values identified by a variable must comply with the specified datatype, otherwise an error should be reported.
+                Please see the DatatypeEnumeration for details about each valid datatype.  For example, if the datatype of the variable is specified as boolean then the value(s) returned by the component / function should be "true", "false", "1", or "0".</xsd:documentation>
             <xsd:documentation>Note that the 'record' datatype is not permitted on variables. The notes section of a variable should be used to hold information that might be helpful to someone examining the technical aspects of the variable. Please refer to the description of the NotesType complex type for more information about the notes element.</xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
@@ -506,7 +518,11 @@
     </xsd:complexType>
     <xsd:element name="external_variable" substitutionGroup="oval-def:variable">
         <xsd:annotation>
-            <xsd:documentation>The external_variable element extends the VariableType and defines a variable with some external source. The actual value(s) for the variable is not provided within the OVAL file, but rather it is retrieved during the evaluation of the OVAL Definition from an external source. An unbounded set of possible-value and possible_restriction child elements can be specified that together specify the list of all possible values that an external source is allowed to supply for the external variable. In other words, the value assigned by an external source must match one of the possible_value or possible_restriction elements specified. Each possible_value element contains a single value that could be assigned to the given external_variable while each possible_restriction element outlines a range of possible values. Note that it is not necessary to declare a variable's possible values, but the option is available if desired. If no possible child elements are specified, then the valid values are only bound to the specified datatype of the external variable. Please refer to the description of the PossibleValueType and PossibleRestrictionType complex types for more information.</xsd:documentation>
+            <xsd:documentation>The external_variable element extends the VariableType and defines a variable with some external source.
+                The actual value(s) for the variable is not provided within the OVAL file, but rather it is retrieved during the evaluation of the OVAL Definition from an external source.
+                An unbounded set of possible-value and possible_restriction child elements can be specified that together specify the list of all possible values that an external source is allowed to supply for the external variable.
+                In other words, the value assigned by an external source must match one of the possible_value or possible_restriction elements specified.
+                Each possible_value element contains a single value that could be assigned to the given external_variable while each possible_restriction element outlines a range of possible values. Note that it is not necessary to declare a variable's possible values, but the option is available if desired. If no possible child elements are specified, then the valid values are only bound to the specified datatype of the external variable. Please refer to the description of the PossibleValueType and PossibleRestrictionType complex types for more information.</xsd:documentation>
         </xsd:annotation>
         <xsd:complexType>
             <xsd:complexContent>
@@ -531,11 +547,12 @@
     </xsd:complexType>
     <xsd:complexType name="PossibleRestrictionType">
         <xsd:annotation>
-            <xsd:documentation>The PossibleRestrictionType complex type outlines a range of possible expected value of an external variable. Each possible_restriction element contains an unbounded list of child restriction elements that each specify a range that an actual value may fall in. For example, a restriction element may specify that a value must be less than 10. When multiple restriction elements are present, a valid possible value would have to meet every restriction. One can think of the possible_value and possible_restriction elements as an OR'd list of possible values, and the restriction elements as an AND'd list of value descriptions. Please refer to the description of the RestrictionType complex type for more information. The required hint attribute gives a short description of what the value means or represents.</xsd:documentation>
+            <xsd:documentation>The PossibleRestrictionType complex type outlines a range of possible expected value of an external variable. Each possible_restriction element contains an unbounded list of child restriction elements that each specify a range that an actual value may fall in. For example, a restriction element may specify that a value must be less than 10. When multiple restriction elements are present, a valid possible value's evaluation is based on the operator attribute. The operator attribute is set to AND by default. Other valid operation values are explained in the description of the OperatorEnumeration simple type. One can think of the possible_value and possible_restriction elements as an OR'd list of possible values, with the restriction elements as using the selected operation to evaluate its own list of value descriptions. Please refer to the description of the RestrictionType complex type for more information. The required hint attribute gives a short description of what the value means or represents.</xsd:documentation>
         </xsd:annotation>
         <xsd:choice>
             <xsd:element name="restriction" type="oval-def:RestrictionType" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:choice>
+        <xsd:attribute name="operator" type="oval:OperatorEnumeration" use="optional" default="AND"/>
         <xsd:attribute name="hint" type="xsd:string" use="required"/>
     </xsd:complexType>
     <xsd:complexType name="RestrictionType">
@@ -550,7 +567,7 @@
     </xsd:complexType>
     <xsd:element name="constant_variable" substitutionGroup="oval-def:variable">
         <xsd:annotation>
-            <xsd:documentation>The constant_variable element extends the VariableType and defines a variable with a constant value(s). Each constant_variable defines either a single value or an array of values to be used throughout the evaluation of the OVAL Definition File in which it has been defined. Constant variables cannot be over-ridden by an external source. The actual value of a constant variable is defined by the required value child element. An array of values can be specified by including multiple instances of the value element. Please refer to the description of the ValueType complex type for more information.</xsd:documentation>
+            <xsd:documentation>The constant_variable element extends the VariableType and defines a variable with a constant value(s). Each constant_variable defines either a single value or a collection of values to be used throughout the evaluation of the OVAL Definition File in which it has been defined. Constant variables cannot be over-ridden by an external source. The actual value of a constant variable is defined by the required value child element. A collection of values can be specified by including multiple instances of the value element. Please refer to the description of the ValueType complex type for more information.</xsd:documentation>
         </xsd:annotation>
         <xsd:complexType>
             <xsd:complexContent>
@@ -718,7 +735,7 @@
     </xsd:complexType>
     <xsd:complexType name="ConcatFunctionType">
         <xsd:annotation>
-            <xsd:documentation>The concat function takes two or more components and concatenates them together to form a single string. The first component makes up the beginning of the resulting string and any following components are added to the end it. If one of the components returns a collection of values then the concat function would be performed multiple times and the end result would be an array of values for the local variable. For example assume a local variable has two sub-components: a basic component element returns the values "abc" and "def", and a literal component element that has a value of "xyz". The local_variable element would evaluate to a collection of two values, "abcxyz" and "defxyz". If one of the components does not exist, then the result of the concat operation should be does not exist.</xsd:documentation>
+            <xsd:documentation>The concat function takes two or more components and concatenates them together to form a single string. The first component makes up the beginning of the resulting string and any following components are added to the end it. If one of the components returns multiple values then the concat function would be performed multiple times and the end result would be a collection of values for the local variable. For example assume a local variable has two sub-components: a basic component element returns the values "abc" and "def", and a literal component element that has a value of "xyz". The local_variable element would evaluate to a collection of two values, "abcxyz" and "defxyz". If one of the components does not exist, then the result of the concat operation should be does not exist.</xsd:documentation>
             <xsd:appinfo>
                 <evaluation_documentation>Below is a chart that specifies how to classify the flag status of a variable using the concat function during evaluation when multiple components are supplied. Both the object and variable component are indirectly associated with collected objects in a system characteristics file. These objects could have been completely collected from the system, or there might have been some type of error that led to the object not being collected, or maybe only a part of the object set was collected. This flag status is important as OVAL Objects or OVAL States that are working with a variable (through the var_ref attribute on an entity) can use this information to report more accurate results. For example, an OVAL Test with a check attribute of 'at least one' that specifies an object with a variable reference, might be able to produce a valid result based on an incomplete object set as long as one of the objects in the set is true.</evaluation_documentation>
                 <evaluation_chart  xml:space="preserve">
@@ -771,8 +788,8 @@
     </xsd:complexType>
     <xsd:complexType name="EscapeRegexFunctionType">
         <xsd:annotation>
-            <xsd:documentation>The escape_regex function takes a single string component and escapes all of the regular expression characters. For example, the string '(\.test_string*)?' will evaluate to '\(\\\.test_string\*\)\?'. The purpose for this is that many times, a component used in pattern match needs to be treated as a literal string and not a regular expression. For example, assume a basic component element that identifies a file path that is held in the Windows registry. This path is a string that might contain regular expression characters. These characters are likely not intended to be treated as regular expression characters and need to be escaped. This function allows a definition writer to mark convert the values of components to regular expression format.</xsd:documentation>
-            <xsd:documentation>Note that when using regular expressions, OVAL supports a common subset of the regular expression character classes, operations, expressions and other lexical tokens defined within Perl 5's regular expression specification. For more information on the supported regular expression syntax in OVAL see: http://oval.mitre.org/language/about/re_support_5.6.html.</xsd:documentation>
+            <xsd:documentation>The escape_regex function takes a single string component and escapes all of the regular expression characters. If the string sub-component contains multiple values, then the escape_regex function will be applied to each individual value and return a multiple-valued result. For example, the string '(\.test_string*)?' will evaluate to '\(\\\.test_string\*\)\?'. The purpose for this is that many times, a component used in pattern match needs to be treated as a literal string and not a regular expression. For example, assume a basic component element that identifies a file path that is held in the Windows registry. This path is a string that might contain regular expression characters. These characters are likely not intended to be treated as regular expression characters and need to be escaped. This function allows a definition writer to mark convert the values of components to regular expression format.</xsd:documentation>
+            <xsd:documentation>Note that when using regular expressions, OVAL supports a common subset of the regular expression character classes, operations, expressions and other lexical tokens defined within Perl 5's regular expression specification. The set of Perl metacharacters which must be escaped by this function is as follows, enclosed by single quotes: '^$\.[](){}*+?|'. For more information on the supported regular expression syntax in OVAL see: http://oval.mitre.org/language/about/re_support_5.6.html.</xsd:documentation>
             <xsd:appinfo>
                 <sch:pattern id="oval-def_escaperegexfunctionrules">
                     <sch:rule context="oval-def:escape_regex/oval-def:literal_component">
@@ -858,8 +875,10 @@
     </xsd:complexType>
     <xsd:complexType name="RegexCaptureFunctionType">
         <xsd:annotation>
-            <xsd:documentation>The regex_capture function captures a single substring from a string component. The 'pattern' attribute provides a regular expression that must contain a single subexpression (using parentheses). The first match of the subexpression is considered the captured substring. For example, the pattern ^abc(.*)xyz$ would capture a substring from each of the string component's values if the value starts with abc and ends with xyz. In this case the subexpression would be all the characters that exist in between the abc and the xyz. If more than one subexpression is supplied only the first match is considered. If more than one match is identified by a single subexpression only the first match is considered. If no matches are found or a subexpression is not supplied the function will evaluate to an empty string. Note that subexpressions match the longest possible substrings.</xsd:documentation>
-            <xsd:documentation>Note that when using regular expressions, OVAL supports a common subset of the regular expression character classes, operations, expressions and other lexical tokens defined within Perl 5's regular expression specification. For more information on the supported regular expression syntax in OVAL see: http://oval.mitre.org/language/about/re_support_5.6.html.</xsd:documentation>
+            <xsd:documentation>The regex_capture function captures a single substring from a single string component. If the string sub-component contains multiple values, then the regex_capture function will extract a substring from each value. The 'pattern' attribute provides a regular expression that should contain a single subexpression (using parentheses). For example, the pattern ^abc(.*)xyz$ would capture a substring from each of the string component's values if the value starts with abc and ends with xyz. In this case the subexpression would be all the characters that exist in between the abc and the xyz. Note that subexpressions match the longest possible substrings.</xsd:documentation>
+            <xsd:documentation>If the regular expression contains multiple capturing sub-patterns, only the first capture is used. If there are no capturing sub-patterns, the result for each target string must be the empty string. Otherwise, if the regular expression could match the target string in more than one place, only the first match (and its first capture) is used. If no matches are found in a target string, the result for that target must be the empty string.</xsd:documentation>
+            <xsd:documentation>Note that a quantified capturing sub-pattern does not produce multiple substrings. Standard regular expression semantics are such that if a capturing sub-pattern is required to match multiple times in order for the overall regular expression to match, the capture produced is the last substring to have matched the sub-pattern.</xsd:documentation>
+            <xsd:documentation>Note that when using regular expressions, OVAL supports a common subset of the regular expression character classes, operations, expressions and other lexical tokens defined within Perl 5's regular expression specification. If any of the Perl metacharacters are to be used literally, then they must be escaped. The set of metacharacters which must be escaped for this purpose is as follows, enclosed by single quotes: '^$\.[](){}*+?|'. For more information on the supported regular expression syntax in OVAL see: http://oval.mitre.org/language/about/re_support_5.6.html.</xsd:documentation>
             <xsd:appinfo>
                 <sch:pattern id="oval-def_regexcapturefunctionrules">
                     <sch:rule context="oval-def:regex_capture/oval-def:literal_component">
@@ -951,6 +970,11 @@
             <xsd:enumeration value="seconds_since_epoch">
                 <xsd:annotation>
                     <xsd:documentation>The seconds_since_epoch value specifies date-time values that represent the time in seconds since the UNIX epoch.  The Unix epoch is the time 00:00:00 UTC on January 1, 1970.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="cim_datetime">
+                <xsd:annotation>
+                    <xsd:documentation>The cim_datetime model is used by WMI and its value specifies date-time strings that follow the format: 'yyyymmddHHMMSS.mmmmmmsUUU', and alternatively 'yyyy-mm-dd HH:MM:SS:mmm' only when used in WMI Query Language queries.</xsd:documentation>
                 </xsd:annotation>
             </xsd:enumeration>
         </xsd:restriction>
@@ -1140,7 +1164,13 @@
         </xsd:attribute>
         <xsd:attribute name="mask" type="xsd:boolean" use="optional" default="false">
             <xsd:annotation>
-                <xsd:documentation>The optional mask attribute is used to identify values that have been hidden for sensitivity concerns. This is used by the result file which uses the system characteristic schema to format the information found on a specific system. If the mask attribute is set to 'true', then the observed value of this field must not be presented in the results file. A system characteristics file that is not held within a results file must not use the mask attribute.  It is possible for masking conflicts to occur where one entity has mask set to true and another entity has mask set to false. A conflict will occur when the mask attribute is set differently on an OVAL Object and matching OVAL State or when more than one OVAL Objects identify the same OVAL Item(s). When such a conflict occurs the result is always to mask the entity.</xsd:documentation>
+                <xsd:documentation>The optional mask attribute is used to identify values that have been hidden for sensitivity concerns.
+                    This is used by the Result document which uses the System Characteristics schema to format the information found on a specific system.
+                    When the mask attribute is set to 'true' on an OVAL Entity or an OVAL Field, the corresponding collected value of that OVAL Entity or OVAL Field MUST NOT be present in the "results" section of the OVAL Results document; the "oval_definitions" section must not be altered and must be an exact copy of the definitions evaluated.
+                    Values MUST NOT be masked in OVAL System Characteristics documents that are not contained within an OVAL Results document.
+                    It is possible for masking conflicts to occur where one entity has mask set to true and another entity has mask set to false.
+                    A conflict will occur when the mask attribute is set differently on an OVAL Object and matching OVAL State or when more than one OVAL Objects identify the same OVAL Item(s).
+                    When such a conflict occurs the result is always to mask the entity.</xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
         <xsd:attribute name="var_ref" type="oval:VariableIDPattern" use="optional">
